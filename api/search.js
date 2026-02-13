@@ -1,5 +1,25 @@
+const axios = require("axios");
+const cheerio = require("cheerio");
+
 const SEARCH = "https://goyabu.io/wp-json/animeonline/search/";
 const NONCE = "5ecb5079b5";
+
+async function fetchSinopse(animeUrl) {
+  try {
+    const { data } = await axios.get(animeUrl, {
+      headers: { "User-Agent": "Mozilla/5.0" }
+    });
+
+    const $ = cheerio.load(data);
+
+    const full = $(".sinopse-full").text().trim();
+    const short = $(".sinopse-short").text().trim();
+
+    return full || short || "";
+  } catch {
+    return "";
+  }
+}
 
 module.exports = async (req, res) => {
   try {
@@ -17,14 +37,25 @@ module.exports = async (req, res) => {
       headers: { Accept: "application/json" }
     });
 
-    const text = await response.text();
+    const data = await response.json();
 
-    res.statusCode = response.status;
-    res.setHeader(
-      "Content-Type",
-      response.headers.get("content-type") || "application/json"
+    if (!Array.isArray(data)) {
+      return res.json(data);
+    }
+
+    const enriched = await Promise.all(
+      data.map(async (anime) => {
+        const link = anime.link || anime.url || anime.permalink;
+        const sinopse = link ? await fetchSinopse(link) : "";
+
+        return {
+          ...anime,
+          sinopse
+        };
+      })
     );
-    res.end(text);
+
+    res.json(enriched);
 
   } catch (err) {
     res.status(500).json({ error: String(err?.message || err) });
