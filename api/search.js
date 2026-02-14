@@ -1,32 +1,56 @@
-const SEARCH = "https://goyabu.io/wp-json/animeonline/search/";
-const NONCE = "5ecb5079b5";
+const axios = require("axios");
+const cheerio = require("cheerio");
 
 module.exports = async (req, res) => {
   try {
-    const keyword = String(req.query.keyword || "").trim();
-    if (!keyword) {
-      res.status(400).json({ error: "keyword vazio" });
-      return;
+    const { id } = req.query;
+
+    if (!id || !/^\d+$/.test(id)) {
+      return res.status(400).json({
+        success: false,
+        error: "ID inválido. Use apenas número.",
+        example: "/api/sinopse/69698"
+      });
     }
 
-    const url = new URL(SEARCH);
-    url.searchParams.set("keyword", keyword);
-    url.searchParams.set("nonce", NONCE);
+    const pageUrl = `https://goyabu.io/${id}`;
 
-    const response = await fetch(url.toString(), {
-      headers: { Accept: "application/json" }
+    const { data } = await axios.get(pageUrl, {
+      headers: {
+        "User-Agent": "Mozilla/5.0",
+        Accept: "text/html,*/*"
+      }
     });
 
-    const text = await response.text();
+    const $ = cheerio.load(data);
 
-    res.statusCode = response.status;
-    res.setHeader(
-      "Content-Type",
-      response.headers.get("content-type") || "application/json"
-    );
-    res.end(text);
+    const full = $(".sinopse-full").text().trim();
+    const short = $(".sinopse-short").text().trim();
+    const sinopse = full || short || "Sinopse não encontrada";
+
+    const image =
+      $(".anime-thumb img").attr("src") ||
+      $("meta[property='og:image']").attr("content") ||
+      "";
+
+    const title =
+      $("h1").first().text().trim() ||
+      $("meta[property='og:title']").attr("content") ||
+      "";
+
+    return res.status(200).json({
+      success: true,
+      id,
+      page_url: pageUrl,
+      title,
+      image,
+      sinopse
+    });
 
   } catch (err) {
-    res.status(500).json({ error: String(err?.message || err) });
+    return res.status(500).json({
+      success: false,
+      error: err?.message || String(err)
+    });
   }
 };
