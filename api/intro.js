@@ -83,7 +83,7 @@ module.exports = async (req, res) => {
     <div class="item">
       <p class="k">Episodes</p>
       <p class="d">Lista episódios por anime_id.</p>
-      <pre>${base}/api/episodes?anime_id=69624</pre>
+      <pre>${base}/api/episodes?anime_id=123456</pre>
     </div>
 
     <div class="item">
@@ -95,7 +95,7 @@ module.exports = async (req, res) => {
     <div class="item">
       <p class="k">Sinopse</p>
       <p class="d">Você pode passar o nome com espaços (na URL vira - ). A API troca por hífen (-) e monta a página.</p>
-      <pre>${base}/api/sinopse/isekai%20dark%20web</pre>
+      <pre>${base}/api/sinopse?nome=dvhack-lopes</pre>
       <pre>Ex: "dvhackz lopes" -> ""dvhackz-lopes"</pre>
     </div>
 
