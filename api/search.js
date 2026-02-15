@@ -1,71 +1,96 @@
 const axios = require("axios");
 const cheerio = require("cheerio");
 
+const SEARCH_API = "https://goyabu.io/wp-json/animeonline/search/";
+const NONCE = "5ecb5079b5";
+
+// Função para pegar gêneros de um anime pelo slug
 async function getGeneros(slug) {
   try {
     const { data } = await axios.get(`https://goyabu.io/anime/${slug}`, {
       headers: { "User-Agent": "Mozilla/5.0" },
       timeout: 3000
     });
+    
     const $ = cheerio.load(data);
     const generos = [];
+    
     $('.filter-btn[href*="generos"]').each((i, el) => {
       const genero = $(el).text().trim();
       if (genero) generos.push(genero);
     });
+    
     return generos;
-  } catch {
+  } catch (error) {
     return [];
   }
 }
 
 module.exports = async (req, res) => {
   try {
-    const keyword = String(req.query.keyword || "").trim().toLowerCase();
-    if (!keyword) return res.status(400).json({ error: "keyword vazio" });
+    const keyword = String(req.query.keyword || "").trim();
 
-    const slug = keyword.replace(/[^a-z0-9]+/g, '-').replace(/^-+|-+$/g, '');
-    const url = `https://goyabu.io/anime/${slug}`;
-    
-    const { data } = await axios.get(url, {
-      headers: { "User-Agent": "Mozilla/5.0" },
-      timeout: 5000,
-      validateStatus: () => true
+    if (!keyword) {
+      return res.status(400).json({
+        success: false,
+        error: "keyword vazio"
+      });
+    }
+
+    console.log(`\n🔍 Buscando: "${keyword}"`);
+
+    // 1️⃣ Faz a busca na API
+    const url = new URL(SEARCH_API);
+    url.searchParams.set("keyword", keyword);
+    url.searchParams.set("nonce", NONCE);
+
+    const response = await fetch(url.toString(), {
+      headers: { Accept: "application/json" }
     });
 
-    if (data.includes('404') || data.includes('não encontrada')) {
+    const data = await response.json();
+
+    // Se não encontrou nada
+    if (!data || !data.length) {
       return res.status(200).json([]);
     }
 
-    const $ = cheerio.load(data);
-    const generos = [];
+    console.log(`📊 Encontrados ${data.length} resultados. Buscando gêneros...`);
+
+    // 2️⃣ Para cada resultado, busca os gêneros
+    const resultadosComGeneros = [];
     
-    $('.filter-btn[href*="generos"]').each((i, el) => {
-      const genero = $(el).text().trim();
-      if (genero) generos.push(genero);
-    });
+    for (let i = 0; i < data.length; i++) {
+      const item = data[i];
+      console.log(`   [${i+1}/${data.length}] ${item.title}...`);
+      
+      const generos = await getGeneros(item.slug);
+      
+      resultadosComGeneros.push({
+        id: item.id,
+        slug: item.slug,
+        titulo: item.title,
+        thumb: item.thumb || null,
+        url: `https://goyabu.io/anime/${item.slug}`,
+        generos: generos.length ? generos : ["Não informado"]
+      });
+      
+      // Delay pequeno pra não sobrecarregar
+      await new Promise(resolve => setTimeout(resolve, 200));
+    }
 
-    const titulo = $('h1.text-hidden').first().text().trim() || slug;
-    const thumb = $('meta[property="og:image"]').attr('content') || null;
-
-    let id = null;
-    $('script').each((i, el) => {
-      const script = $(el).html() || '';
-      const match = script.match(/post_id[=:]\s*(\d+)/);
-      if (match) id = match[1];
-    });
-
+    console.log(`\n✅ Retornando ${resultadosComGeneros.length} resultados com gêneros`);
+    
     res.setHeader("Content-Type", "application/json");
-    return res.status(200).json([{
-      id: id || slug.match(/\d+$/)?.[0] || null,
-      slug,
-      titulo,
-      thumb,
-      url: `https://goyabu.io/anime/${slug}`,
-      generos: generos.length ? generos : ["Não informado"]
-    }]);
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    
+    return res.status(200).json(resultadosComGeneros);
 
   } catch (err) {
-    return res.status(500).json({ error: err.message });
+    console.error("Erro:", err.message);
+    return res.status(500).json({
+      success: false,
+      error: String(err?.message || err)
+    });
   }
 };
