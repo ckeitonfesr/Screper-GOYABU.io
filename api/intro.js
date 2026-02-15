@@ -10,7 +10,7 @@ module.exports = async (req, res) => {
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>documentação · anime api</title>
+<title>documentação · Anime Api</title>
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Inter:opsz,wght@14..32,400;14..32,500;14..32,600;14..32,700&display=swap" rel="stylesheet">
@@ -615,7 +615,7 @@ module.exports = async (req, res) => {
       <img class="avatar" src="${avatar}" alt="Lopes">
       <div class="pmeta">
         <div class="pname">Lopes</div>
-        <div class="puser">@dvhackz</div>
+        <div class="puser">@dvhackzz</div>
       </div>
       <a class="plink" href="${discordUserUrl}" target="_blank" rel="noreferrer">discord</a>
     </div>
@@ -671,7 +671,7 @@ module.exports = async (req, res) => {
         <img class="avatar" src="${avatar}" alt="Lopes">
         <div class="pmeta">
           <div class="pname">Lopes</div>
-          <div class="puser">@dvhackz</div>
+          <div class="puser">@dvhackzz</div>
         </div>
         <a class="plink" href="${discordUserUrl}" target="_blank" rel="noreferrer">discord</a>
       </div>
@@ -933,7 +933,7 @@ module.exports = async (req, res) => {
     <a href="${discordUserUrl}" target="_blank" rel="noreferrer">discord</a>
   </div>
   <div style="margin-top:1rem;">
-    © 2026 anime api · developer by <strong>Lopes</strong> · <strong>dvhackz</strong>
+    © 2026 Anime Api · developer by <strong>Lopes</strong> · <strong>dvhackzz</strong>
   </div>
 </footer>
 
