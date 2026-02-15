@@ -5,63 +5,64 @@ function absUrl(u) {
   if (!u) return "";
   u = String(u).trim();
   if (!u) return "";
-  if (u.startsWith("http://") || u.startsWith("https://")) return u;
+  if (u.startsWith("http")) return u;
   if (u.startsWith("//")) return "https:" + u;
   if (u.startsWith("/")) return BASE + u;
   return BASE + "/" + u;
 }
 
 function mapStatus(s) {
-  const v = String(s ?? "").trim();
-  return v === "1" ? "lançando" : "finalizado";
+  return String(s ?? "").trim() === "1"
+    ? "em_lancamento"
+    : "finalizado";
 }
 
 module.exports = async (req, res) => {
   try {
     const animeId = String(req.query.anime_id || "").trim();
 
-    if (!animeId || !/^\d+$/.test(animeId)) {
+    if (!/^\d+$/.test(animeId)) {
       return res.status(400).json({
         success: false,
         error: "anime_id inválido"
       });
     }
 
-    const url = new URL(AJAX);
-    url.searchParams.set("action", "get_anime_episodes");
-    url.searchParams.set("anime_id", animeId);
+    const url = `${AJAX}?action=get_anime_episodes&anime_id=${animeId}`;
 
-    const response = await fetch(url.toString(), {
+    const response = await fetch(url, {
       headers: {
         "User-Agent": "Mozilla/5.0",
-        Accept: "application/json, text/javascript, */*; q=0.01",
+        Accept: "application/json",
         "X-Requested-With": "XMLHttpRequest",
         Referer: BASE + "/"
       }
     });
 
-    const data = await response.json();
+    const raw = await response.text();
+
+    res.setHeader("Content-Type", "application/json; charset=utf-8");
+
+    const data = JSON.parse(raw);
 
     if (data?.success && Array.isArray(data.data)) {
-      data.data = data.data.map((ep) => ({
-        id: ep?.id ?? null,
-        episodio: String(ep?.episodio ?? ""),
-        link: absUrl(ep?.link),
-        type: String(ep?.type ?? ""),
-        episode_name: String(ep?.episode_name ?? ""),
-        audio: String(ep?.audio ?? ""),
-        imagem: absUrl(ep?.imagem),
-        update: String(ep?.update ?? ""),
-        status: mapStatus(ep?.status)
+      data.data = data.data.map(ep => ({
+        id: ep.id,
+        episodio: ep.episodio,
+        link: absUrl(ep.link),
+        audio: ep.audio,
+        imagem: absUrl(ep.imagem),
+        update: ep.update,
+        status: mapStatus(ep.status)
       }));
     }
 
-    return res.status(200).json(data);
+    return res.status(200).send(JSON.stringify(data));
 
   } catch (err) {
     return res.status(500).json({
       success: false,
-      error: String(err?.message || err)
+      error: err.message
     });
   }
 };
