@@ -11,13 +11,20 @@ function absUrl(u) {
   return BASE + "/" + u;
 }
 
+function mapStatus(s) {
+  const v = String(s ?? "").trim();
+  return v === "1" ? "lançando" : "finalizado";
+}
+
 module.exports = async (req, res) => {
   try {
     const animeId = String(req.query.anime_id || "").trim();
 
     if (!animeId || !/^\d+$/.test(animeId)) {
-      res.status(400).json({ success: false, error: "anime_id inválido" });
-      return;
+      return res.status(400).json({
+        success: false,
+        error: "anime_id inválido"
+      });
     }
 
     const url = new URL(AJAX);
@@ -45,12 +52,16 @@ module.exports = async (req, res) => {
         audio: String(ep?.audio ?? ""),
         imagem: absUrl(ep?.imagem),
         update: String(ep?.update ?? ""),
-        status: String(ep?.status ?? "")
+        status: mapStatus(ep?.status)
       }));
     }
 
-    res.status(200).json(data);
+    return res.status(200).json(data);
+
   } catch (err) {
-    res.status(500).json({ success: false, error: String(err?.message || err) });
+    return res.status(500).json({
+      success: false,
+      error: String(err?.message || err)
+    });
   }
 };
