@@ -17,18 +17,20 @@ module.exports = async (req, res) => {
     url.searchParams.set("nonce", NONCE);
 
     const response = await fetch(url.toString(), {
-      headers: {
-        Accept: "application/json"
-      }
+      headers: { Accept: "application/json" }
     });
 
     const data = await response.json();
 
     const modified = Array.isArray(data)
-      ? data.map(item => ({
-          ...item,
-          dublado: /dublado/i.test(item.title || "")
-        }))
+      ? data.map(item => {
+          const { genres, status, audio, ...rest } = item;
+
+          return {
+            ...rest,
+            dublado: /dublado/i.test(item.title || "")
+          };
+        })
       : data;
 
     return res.status(response.status).json(modified);
