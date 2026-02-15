@@ -17,8 +17,8 @@ module.exports = async (req, res) => {
 <style>
   :root{
     --bg:#f6f7fb;
-    --text:#0f172a;
-    --muted:#526078;
+    --text:#1f2937;
+    --muted:#5b677a;
 
     --card:#ffffff;
     --card2:#fbfcff;
@@ -29,21 +29,23 @@ module.exports = async (req, res) => {
     --shadow: 0 20px 40px -22px rgba(15,23,42,0.12);
     --shadow2: 0 15px 35px -20px rgba(15,23,42,0.10);
 
-    --accent:#0f172a;
+    --accent:#1f2937;
     --accentSoft:#f1f5ff;
     --accentBorder:#dbe6ff;
 
     --methodBg:#eef2ff;
-    --methodText:#0f172a;
+    --methodText:#1f2937;
     --methodBorder:#d9e2ff;
 
     --btnBg:#ffffff;
     --btnBorder:#d7e2ec;
     --btnHover:#f3f6ff;
 
-    /* code claro */
-    --codeBg:#f3f6ff;
-    --codeText:#0f172a;
+    --tabActiveBg:#1f2937;
+    --tabActiveText:#ffffff;
+
+    --codeBg:#f5f7ff;
+    --codeText:#1f2937;
     --codeBorder:#dbe6ff;
     --codeInlineBg:#eef3ff;
 
@@ -73,7 +75,7 @@ module.exports = async (req, res) => {
     background:var(--codeInlineBg);
     padding:.12rem .35rem;
     border-radius:8px;
-    border:1px solid rgba(15,23,42,.08);
+    border:1px solid rgba(31,41,55,.10);
   }
 
   .container{
@@ -199,16 +201,16 @@ module.exports = async (req, res) => {
     border-radius:12px;
     transition:all 0.15s ease;
     border-left:2px solid transparent;
-    opacity:.90;
+    opacity:.92;
   }
   .sidebar-nav-link:hover{
     background:var(--btnHover);
-    border-left-color:rgba(15,23,42,.35);
+    border-left-color:rgba(31,41,55,.28);
     opacity:1;
   }
   .sidebar-nav-link.active{
     background:var(--btnHover);
-    border-left-color:rgba(15,23,42,.35);
+    border-left-color:rgba(31,41,55,.28);
     opacity:1;
   }
 
@@ -347,7 +349,7 @@ module.exports = async (req, res) => {
     border-bottom:1px solid transparent;
     transition:border 0.1s;
   }
-  .tip-box a:hover{border-bottom-color:rgba(15,23,42,.35)}
+  .tip-box a:hover{border-bottom-color:rgba(31,41,55,.25)}
 
   .codeTabs{
     border:1px solid var(--line);
@@ -361,7 +363,7 @@ module.exports = async (req, res) => {
     gap:.35rem;
     padding:.45rem;
     border-bottom:1px solid var(--line);
-    background:rgba(241,245,255,.65);
+    background:rgba(241,245,255,.55);
   }
   .tabBtn{
     border:1px solid var(--btnBorder);
@@ -376,9 +378,9 @@ module.exports = async (req, res) => {
   }
   .tabBtn:hover{ background:var(--btnHover); }
   .tabBtn.active{
-    background:#0f172a;
-    border-color:#0f172a;
-    color:#fff;
+    background:var(--tabActiveBg);
+    border-color:var(--tabActiveBg);
+    color:var(--tabActiveText);
   }
   .tabPane{ display:none; }
   .tabPane.active{ display:block; }
@@ -390,7 +392,7 @@ module.exports = async (req, res) => {
     font-family:'SF Mono','Fira Code','JetBrains Mono',monospace;
     font-size:var(--mono);
     overflow-x:auto;
-    border-top:1px solid rgba(15,23,42,0.08);
+    border-top:1px solid rgba(31,41,55,0.08);
   }
   .code-block code{
     background:transparent;
@@ -412,11 +414,11 @@ module.exports = async (req, res) => {
     padding:.8rem;
     border-radius:14px;
     border:1px solid var(--line);
-    background:linear-gradient(180deg, rgba(15,23,42,0.02), rgba(15,23,42,0.00));
+    background:linear-gradient(180deg, rgba(31,41,55,0.02), rgba(31,41,55,0.00));
   }
   .avatar{
     width:44px;height:44px;border-radius:50%;
-    border:1px solid rgba(15,23,42,.12);
+    border:1px solid rgba(31,41,55,.12);
     object-fit:cover;
     background:#000;
   }
@@ -630,22 +632,9 @@ module.exports = async (req, res) => {
       </div>
     </div>
 
-    <div class="codeTabs" data-tabs>
-      <div class="tabBar">
-        <button class="tabBtn active" data-tab="baseTab">base url</button>
-        <button class="tabBtn" data-tab="baseFetch">fetch</button>
-      </div>
-      <div class="tabPane active" id="baseTab">
-        <div class="baseRow" style="margin:.75rem;">
-          <div class="basecode" id="basecode">${base}</div>
-          <button class="copybtn" id="copyBase">copiar</button>
-        </div>
-      </div>
-      <div class="tabPane" id="baseFetch">
-        <div class="code-block"><code>fetch("${base}/api/search?keyword=overlord")
-  .then(r =&gt; r.json())
-  .then(console.log);</code></div>
-      </div>
+    <div class="baseRow">
+      <div class="basecode" id="basecode">${base}</div>
+      <button class="copybtn" id="copyBase">copiar</button>
     </div>
 
     <div class="sidebar-section">
@@ -928,7 +917,7 @@ module.exports = async (req, res) => {
       <h2 class="section-title">Changelog</h2>
       <div class="endpoint-card">
         <div class="endpoint-description">
-          <strong>v5</strong> • tema claro + code blocks claros + tabs claras + layout mais compacto.
+          <strong>v6</strong> • base url sem tabs + tabs grafite + code-block claro + texto menos preto.
         </div>
       </div>
     </section>
