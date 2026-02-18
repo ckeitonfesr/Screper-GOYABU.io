@@ -9,13 +9,13 @@
 </p>
 
 <p align="center">
-  <span style="color: #0366d6; font-weight: 500;">BASE URL</span> <span style="color: #888;">•</span>
-  <span style="color: #0366d6; font-weight: 500;">ENDPOINTS</span> <span style="color: #888;">•</span>
-  <span style="color: #0366d6; font-weight: 500;">FLUXO</span> <span style="color: #888;">•</span>
-  <span style="color: #0366d6; font-weight: 500;">EXEMPLOS</span> <span style="color: #888;">•</span>
-  <span style="color: #0366d6; font-weight: 500;">RESPOSTAS</span> <span style="color: #888;">•</span>
-  <span style="color: #0366d6; font-weight: 500;">ERROS</span> <span style="color: #888;">•</span>
-  <span style="color: #0366d6; font-weight: 500;">CHANGELOG</span>
+  <strong style="color: #0366d6;">BASE URL</strong> <span style="color: #888;">·</span>
+  <strong style="color: #0366d6;">ENDPOINTS</strong> <span style="color: #888;">·</span>
+  <strong style="color: #0366d6;">FLUXO</strong> <span style="color: #888;">·</span>
+  <strong style="color: #0366d6;">EXEMPLOS</strong> <span style="color: #888;">·</span>
+  <strong style="color: #0366d6;">RESPOSTAS</strong> <span style="color: #888;">·</span>
+  <strong style="color: #0366d6;">ERROS</strong> <span style="color: #888;">·</span>
+  <strong style="color: #0366d6;">CHANGELOG</strong>
 </p>
 
 ---
