@@ -9,13 +9,13 @@
 </p>
 
 <p align="center">
-  <a href="#-base-url">Base URL</a> •
-  <a href="#-endpoints">Endpoints</a> •
-  <a href="#-fluxo-b%C3%A1sico">Fluxo</a> •
-  <a href="#-exemplos-de-uso">Exemplos</a> •
-  <a href="#-respostas">Respostas</a> •
-  <a href="#-erros">Erros</a> •
-  <a href="#-changelog">Changelog</a>
+  <span style="color: #0366d6; font-weight: 500;">BASE URL</span> <span style="color: #888;">•</span>
+  <span style="color: #0366d6; font-weight: 500;">ENDPOINTS</span> <span style="color: #888;">•</span>
+  <span style="color: #0366d6; font-weight: 500;">FLUXO</span> <span style="color: #888;">•</span>
+  <span style="color: #0366d6; font-weight: 500;">EXEMPLOS</span> <span style="color: #888;">•</span>
+  <span style="color: #0366d6; font-weight: 500;">RESPOSTAS</span> <span style="color: #888;">•</span>
+  <span style="color: #0366d6; font-weight: 500;">ERROS</span> <span style="color: #888;">•</span>
+  <span style="color: #0366d6; font-weight: 500;">CHANGELOG</span>
 </p>
 
 ---
